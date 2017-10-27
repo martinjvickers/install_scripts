@@ -1,0 +1,49 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+ 
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+ 
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+ 
+%runscript
+ 
+%post
+    mkdir /jic
+    mkdir /nbi
+    mkdir /tgac
+    mkdir /tsl
+    mkdir /opt/software
+
+    ### Install your packages ###
+    yum -y install wget tar gzip make gcc gcc-c++ csh perl git zlib-devel bzip2 bzip2-devel ncurses-devel lzo-devel lzma xz-devel
+    
+    yum install epel-release -y
+    yum update -y
+    yum install octave octave-devel scipy python which -y
+
+    ## YES!!! in 2017 I am compiling samtools 0.1.7 here!
+    cd /opt/software
+    wget https://sourceforge.net/projects/samtools/files/samtools/0.1.7/samtools-0.1.7a.tar.bz2/download
+    mv download samtools-0.1.7a.tar.bz2
+    bunzip2 samtools-0.1.7a.tar.bz2
+    tar xvf samtools-0.1.7a.tar
+    cd samtools-0.1.7a
+    cat Makefile|awk '{if($1=="DFLAGS=") print $0" -fPIC"; else print $0}' > newMakefile
+    mv newMakefile Makefile
+    make
+
+    git clone https://github.com/ratschlab/rDiff.git
+    cd rDiff
+    export PATH=:$PATH:/opt/software/samtools-0.1.7a
+    ./configure
+    make
+    export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/bin:/sbin:/usr/bin:/usr/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
+
+    # sym links
+    cd /usr/local/bin
+    ln -s /opt/software/samtools-0.1.7a/samtools .
+    ln -s /opt/software/samtools-0.1.7a/rDiff/bin/* .
