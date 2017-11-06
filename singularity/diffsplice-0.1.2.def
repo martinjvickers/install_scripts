@@ -25,4 +25,5 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
     wget http://protocols.netlab.uky.edu/~yin/download/diffsplice/diffsplice_0.1.2beta.tgz
     tar xvzf diffsplice_0.1.2beta.tgz
     cd diffsplice_0.1.2beta
-    cp diffsplice /usr/local/bin
+    cp bin/* /usr/local/bin
+    
