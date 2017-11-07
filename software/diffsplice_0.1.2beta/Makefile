@@ -19,7 +19,7 @@ SeparateFragment:
 	g++ $(CFLAGS) -o bin/fragment src/parseFragment.cpp 
 
 GenomeTree:
-	g++ $(CFLAGS) -o bin/tree src/gtree/GTree.cpp 
+	g++ $(CFLAGS) -o bin/GTree src/gtree/GTree.cpp 
 
 DiffExprAnalysis:
 	g++ $(CFLAGS) -o bin/diff_expr_analysis src/testexpr/ExpressionAnalysis.cpp src/testexpr/selectSignificance.cpp 

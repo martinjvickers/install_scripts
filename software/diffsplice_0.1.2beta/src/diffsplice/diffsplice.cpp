@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
 		{
 			time(&t); cur_time = ctime(&t); cur_time.erase(cur_time.size() - 1);
 			cout << "[" << cur_time << "]\t" << flush;
-			comd = "tree " + filepath + chrName[i] + "/ " + resultpath + " " + chrName[i] + " " + target_path + "data/config_gtree";
+			comd = "GTree " + filepath + chrName[i] + "/ " + resultpath + " " + chrName[i] + " " + target_path + "data/config_gtree";
 			system(comd.c_str());
 			cout << endl;
 		}
