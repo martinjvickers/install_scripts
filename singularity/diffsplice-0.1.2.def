@@ -19,11 +19,10 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
     mkdir /opt/software
 
     ### Install your packages ###
-    yum -y install wget tar gzip make gcc gcc-c++ csh perl
+    yum -y install wget tar gzip make gcc gcc-c++ csh perl git
 
     cd /opt/software
-    wget http://protocols.netlab.uky.edu/~yin/download/diffsplice/diffsplice_0.1.2beta.tgz
-    tar xvzf diffsplice_0.1.2beta.tgz
-    cd diffsplice_0.1.2beta
+    git clone https://github.com/martinjvickers/install_scripts.git
+    cd install_scripts/software/diffsplice_0.1.2beta/
+    make
     cp bin/* /usr/local/bin
-    
