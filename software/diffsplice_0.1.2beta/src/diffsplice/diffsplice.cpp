@@ -181,7 +181,7 @@ int main(int argc, char* argv[])
 				while (curSample != NULL)
 				{
 					comd = "mkdir -p " + target_path + "data/sam/group" + itostr(curGroup->groupID) + "/ID" + itostr(curBioRep->bioRepID) + "_rep" + itostr(curSample->techRepID); system(comd.c_str());
-					comd = "./bin/sepSAM " + curSample->datafilename + " " + target_path + "data/sam/group" + itostr(curGroup->groupID) + "/ID" + itostr(curBioRep->bioRepID) + "_rep" + itostr(curSample->techRepID) + "/"; system(comd.c_str());
+					comd = "sepSAM " + curSample->datafilename + " " + target_path + "data/sam/group" + itostr(curGroup->groupID) + "/ID" + itostr(curBioRep->bioRepID) + "_rep" + itostr(curSample->techRepID) + "/"; system(comd.c_str());
 
 					curSample = curSample->next;
 				}
@@ -229,7 +229,7 @@ int main(int argc, char* argv[])
 					filepath = target_path + "data/sam/group" + itostr(curGroup->groupID) + "/ID" + itostr(curBioRep->bioRepID) + "_rep" + itostr(curSample->techRepID) + "/";
 					for (chrLoopCnt = 0; chrLoopCnt < chrName.size(); ++chrLoopCnt)
 					{
-						comd = "./bin/fragment " + filepath + " " + chrName[chrLoopCnt] + " " + itostr(sampleCnt) + " noDB " + target_path + "data/frag/" + chrName[chrLoopCnt] + "/"; 
+						comd = "fragment " + filepath + " " + chrName[chrLoopCnt] + " " + itostr(sampleCnt) + " noDB " + target_path + "data/frag/" + chrName[chrLoopCnt] + "/"; 
 						system(comd.c_str());
 					}
 
@@ -303,7 +303,7 @@ int main(int argc, char* argv[])
 		{
 			time(&t); cur_time = ctime(&t); cur_time.erase(cur_time.size() - 1);
 			cout << "[" << cur_time << "]\t" << flush;
-			comd = "./bin/tree " + filepath + chrName[i] + "/ " + resultpath + " " + chrName[i] + " " + target_path + "data/config_gtree";
+			comd = "tree " + filepath + chrName[i] + "/ " + resultpath + " " + chrName[i] + " " + target_path + "data/config_gtree";
 			system(comd.c_str());
 			cout << endl;
 		}
@@ -316,13 +316,13 @@ int main(int argc, char* argv[])
 		time(&t); cur_time = ctime(&t); cur_time.erase(cur_time.size() - 1);
 		cout << "[" << cur_time << "]\tBegin the differential expression analysis on genomic loci" << endl;
 
-		comd = "./bin/diff_expr_analysis " + resultpath + " " + target_path + "data/config_testexpr"; 
+		comd = "diff_expr_analysis " + resultpath + " " + target_path + "data/config_testexpr"; 
 		system(comd.c_str());
 
 		time(&t); cur_time = ctime(&t); cur_time.erase(cur_time.size() - 1);
 		cout << "[" << cur_time << "]\tBegin the differential transcription analysis on ASMs" << endl;
 
-		comd = "./bin/diff_asm_analysis " + resultpath + " " + target_path + "data/config_testtrans"; 
+		comd = "diff_asm_analysis " + resultpath + " " + target_path + "data/config_testtrans"; 
 		system(comd.c_str());
 	}
 
