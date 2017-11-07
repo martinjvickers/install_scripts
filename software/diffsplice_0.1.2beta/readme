@@ -1,0 +1,16 @@
+To compile the diffsplice binaries, please use the following command (assuming already in the diffsplice folder):
+	make
+
+To run diffsplice, please use the following command at the diffsplice folder:
+	./diffsplice settings.cfg datafile.cfg path_to_result > runname.log
+
+Please visit http://www.netlab.uky.edu/p/bioinfo/DiffSplice for detailed information.
+
+
+
+
+
+
+
+
+
