@@ -10,7 +10,7 @@ CFLAGS += $(OPTFLAGS)
 #CFLAGS += $(LDFLAGS)
 
 DiffSplice:
-	g++ $(CFLAGS) -o diffsplice src/diffsplice/diffsplice.cpp
+	g++ $(CFLAGS) -o bin/diffsplice src/diffsplice/diffsplice.cpp
 
 SeparateSAM:
 	g++ $(CFLAGS) -o bin/sepSAM src/sepSAM.cpp 
