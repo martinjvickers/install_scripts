@@ -1,0 +1,17 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  mkdir /opt/software/
+  cd /opt/software/
+
+
+  yum -y update
+  yum -y install yum-utils which wget
+  yum -y groupinstall development
+
+%environment
