@@ -1,0 +1,34 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+ 
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+ 
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+ 
+%runscript
+ 
+%post
+    mkdir /jic
+    mkdir /nbi
+    mkdir /tgac
+    mkdir /tsl
+    mkdir /opt/software
+ 
+    ### Install your packages ###
+    yum install epel-release -y
+    yum update -y
+    yum -y install wget tar gzip make gcc gcc-c++ csh perl
+    yum install R -y
+    yum install perl-DBD-SQLite -y
+
+    cd /opt/software
+    wget http://watson.compbio.iupui.edu/aozhou/alt_event_finder_files/AltEventFinder_v0.1.tar.gz
+    tar -zxf AltEventFinder_v0.1.tar.gz
+    cd AltEventFinder_v0.1
+    cp -r * /usr/local/bin/
+
+    
