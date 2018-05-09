@@ -8,11 +8,13 @@ sudo singularity build rnastructure-6.0.1.img ../src/rnastructure-6.0.1.def
 
 The key interest is that the DATAPATH needs to be set. This can be two ways;
 
-* By preappending `SINGULARITYENV_*` before `singularity exec`
+* By preappending `SINGULARITYENV_*` before `singularity exec rnastructure-6.0.1.img`
 
 e.g. 
 
 `SINGULARITYENV_DATAPATH=/opt/software/RNAstructure/data_tables`
+
+as demonstrated in `bin/singularity.exec.orig`.
 
 * Using the `%environment` section in the recipe
 
@@ -22,6 +24,8 @@ e.g.
 %environment
   DATAPATH=/opt/software/RNAstructure/data_tables
 ```
+
+as demonstrated in the recipe file.
 
 ## Sym-links
 
