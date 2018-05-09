@@ -1,0 +1,11 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  yum -y install https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+  yum update && yum -y install samtools
+
