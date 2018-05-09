@@ -1,0 +1,34 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+  echo "Make Required Directories"
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  mkdir /opt/software/
+  cd /opt/software/
+
+  echo "Install OS dependencies"
+  yum -y update
+  yum -y install yum-utils which wget
+  yum -y groupinstall development
+  
+  echo "Install miniConda"
+  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+
+  # IMPORTANT: export the miniconda binary directory while in %post
+  export PATH=$PATH:/usr/local/miniconda/bin
+  # This appends miniconda to the container PATH
+  echo 'export PATH=$PATH:/usr/local/miniconda/bin' >>$SINGULARITY_ENVIRONMENT
+
+  echo "Add conda channels and install bioconda tools"
+  conda config --add channels conda-forge
+  conda config --add channels bioconda
+  conda install -y trimmomatic tophat cufflinks transdecoder trinity
+
+%environment
+  # This works, but brings in the host PATH into the container
+  #export PATH=$PATH:/usr/local/miniconda/bin
