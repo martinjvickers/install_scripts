@@ -1,0 +1,37 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%runscript
+  echo "This is the runscript of the container"
+
+%post
+  yum -y update
+  yum -y install make wget gzip less tree bzip2 tar gcc gcc-c++ vim-common vim-minimal
+
+  mkdir -p /opt/software
+  cd /opt/software
+
+  SRC_TGZ=RNAstructureSource.tgz
+
+  if [ ! -e $SRC_TGZ ]; then
+    wget http://rna.urmc.rochester.edu/Releases/6.0.1/$SRC_TGZ
+    tar -zxf $SRC_TGZ
+  fi
+
+  cd RNAstructure
+  export EXE_DIR=$(pwd)/exe
+
+  make realclean
+  make all
+
+  # create links to the programs
+  for TOOL in $(ls $EXE_DIR)
+  do
+    ln -fs ${EXE_DIR}/${TOOL} /usr/local/bin/${TOOL}
+  done
+
+%environment
+  DATAPATH=/opt/software/RNAstructure/data_tables
