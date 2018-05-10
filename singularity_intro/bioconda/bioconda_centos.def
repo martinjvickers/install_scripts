@@ -21,8 +21,6 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
 
   # IMPORTANT: export the miniconda binary directory while in %post
   export PATH=$PATH:/usr/local/miniconda/bin
-  # This appends miniconda to the container PATH
-  echo 'export PATH=$PATH:/usr/local/miniconda/bin' >>$SINGULARITY_ENVIRONMENT
 
   echo "Add conda channels and install bioconda tools"
   conda config --add channels conda-forge
@@ -30,5 +28,4 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
   conda install -y trimmomatic tophat cufflinks transdecoder trinity
 
 %environment
-  # This works, but brings in the host PATH into the container
-  #export PATH=$PATH:/usr/local/miniconda/bin
+  export PATH=$PATH:/usr/local/miniconda/bin
