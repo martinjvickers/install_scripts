@@ -12,7 +12,7 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
 
   echo "Install OS dependencies"
   yum -y update
-  yum -y install yum-utils which wget libsqlite3x-devel zlib-devel
+  yum -y install yum-utils which wget libsqlite3x-devel zlib-devel gnuplot
   yum -y groupinstall development
   
   echo "Install CLASS2: the only one not in bioconda"
