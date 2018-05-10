@@ -1,0 +1,46 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+  echo "Make Required Directories"
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  mkdir /opt/software/
+  cd /opt/software/
+
+  echo "Install OS dependencies"
+  yum -y update
+  yum -y install yum-utils which wget libsqlite3x-devel zlib-devel
+  yum -y groupinstall development
+  
+  echo "Install CLASS2: the only one not in bioconda"
+  wget 'https://netcologne.dl.sourceforge.net/project/splicebox/CLASS-2.1.7.tar.gz'
+  tar xvfz CLASS-2.1.7.tar.gz
+  cd CLASS-2.1.7
+  sh build.sh
+  mv class /usr/local/bin/
+  mv junc /usr/local/bin/
+  mv clnb /usr/local/bin/
+  mv grader /usr/local/bin/
+  mv addXS /usr/local/bin/
+  chmod +x run_class.pl
+  mv run_class.pl /usr/local/bin/
+  cd ../
+  perl /usr/local/bin/run_class.pl -a CLASS-2.1.7/Sample/sample.bam
+
+  echo "Install miniConda"
+  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+
+  # IMPORTANT: export the miniconda binary directory while in %post
+  export PATH=$PATH:/usr/local/miniconda/bin
+
+  echo "Add conda channels and install bioconda tools"
+  conda config --add channels conda-forge
+  conda config --add channels bioconda
+  conda install -y diamond prodigal portcullis hisat2 stringtie samtools transdecoder mikado blast star trinity cufflinks gmap
+
+%environment
+  export PATH=$PATH:/usr/local/miniconda/bin
