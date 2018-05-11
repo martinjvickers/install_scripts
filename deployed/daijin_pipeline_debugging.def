@@ -51,4 +51,8 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
 
 %environment
   export PATH=$PATH:/usr/local/miniconda/bin
-  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/software/portcullis/deps/boost/build/lib:/usr/local/miniconda/lib/
+  ## The portcullis boost build works okay when creating a fresh image so 
+  ## only libpython3.6m.so can not be found?
+  ##export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/software/portcullis/deps/boost/build/lib:/usr/local/miniconda/lib/
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/miniconda/lib/
+
