@@ -1,0 +1,41 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+ 
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+ 
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+ 
+%runscript
+ 
+%post
+    mkdir /jic
+    mkdir /nbi
+    mkdir /tgac
+    mkdir /ei
+    mkdir /tsl
+    mkdir /opt/software
+ 
+    ### Install your packages ###
+    yum -y update
+    yum -y install yum-utils wget which zlib-devel
+    yum -y groupinstall development
+
+    # Install Conda
+    wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh
+    bash Miniconda2-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+    export PATH=$PATH:/usr/local/miniconda/bin
+
+    ## Install channels and tools
+    conda config --add channels conda-forge
+    conda config --add channels bioconda
+    ## In reality this will install the latest deeptools, 
+    ## but it was version 3.1.1 when I installed on the HPC
+    conda install -y deeptools
+
+%environment
+  export PATH=$PATH:/usr/local/miniconda/bin
+
