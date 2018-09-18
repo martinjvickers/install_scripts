@@ -2,7 +2,7 @@
 
 These are software installs on the NBI HPC.
 
-## Singularity quick notes
+## OLD Singularity quick notes
 
 ### Create a disk image
 

@@ -1,0 +1,58 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+  echo "Make Required Directories"
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  mkdir /opt/software/
+  cd /opt/software/
+
+  echo "Install OS dependencies"
+  yum -y update
+  yum -y install yum-utils which wget libsqlite3x-devel zlib-devel gnuplot
+  yum -y groupinstall development
+  
+  echo "Install older version of CLASS2: the only one not in bioconda"
+  wget 'https://downloads.sourceforge.net/project/splicebox/class_2.1.2.tar.gz'
+  tar xvfz class_2.1.2.tar.gz
+  cd CLASS_2.1.2
+  sh build.sh
+  cp class /usr/local/bin/
+  cp junc /usr/local/bin/
+  cp clnb /usr/local/bin/
+  cp grader /usr/local/bin/
+  cd ../
+
+  echo "Install miniConda"
+  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+
+  # IMPORTANT: export the miniconda binary directory while in %post
+  export PATH=$PATH:/usr/local/miniconda/bin
+
+  echo "Add conda channels and install bioconda tools"
+  conda config --add channels conda-forge
+  conda config --add channels bioconda
+  conda install -y diamond prodigal hisat2 stringtie samtools transdecoder mikado blast star trinity cufflinks gmap
+
+  echo "Installing portcullis: Needs to be done after conda samtools"
+  yum -y install libstdc++-static
+  git clone https://github.com/maplesond/portcullis.git
+  cd portcullis
+  ./build_boost.sh
+  ./autogen.sh
+  ./configure
+  make
+  make install
+  cd ../
+
+%environment
+  export PATH=$PATH:/usr/local/miniconda/bin
+  ## The portcullis boost build works okay when creating a fresh image so 
+  ## only libpython3.6m.so can not be found?
+  ##export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/software/portcullis/deps/boost/build/lib:/usr/local/miniconda/lib/
+  export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/miniconda/lib/
+

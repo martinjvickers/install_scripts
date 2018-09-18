@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+DIR=`dirname $(readlink -f $0)`
+singularity exec $DIR/../rnastructure-6.0.1.img $(basename "$0") $@
+

@@ -1,0 +1,3 @@
+#!/bin/bash
+DIR=`dirname $(readlink -f $0)`
+singularity exec $DIR/../samtools-0.1.19ubuntu.img $(basename "$0") $@

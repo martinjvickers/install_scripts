@@ -1,0 +1,10 @@
+BootStrap: debootstrap
+OSVersion: trusty
+MirrorURL: http://us.archive.ubuntu.com/ubuntu/
+
+%post
+  mkdir /jic && mkdir /nbi && mkdir /tgac && mkdir /tsl
+  apt-get install --force-yes -y software-properties-common
+  add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+  apt-get update --force-yes -y 
+  apt-get install --force-yes -y samtools
