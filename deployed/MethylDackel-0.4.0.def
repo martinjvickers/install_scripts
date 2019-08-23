@@ -1,0 +1,39 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+ 
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+ 
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+ 
+%runscript
+ 
+%post
+    mkdir /jic
+    mkdir /nbi
+    mkdir /tgac
+    mkdir /ei
+    mkdir /tsl
+    mkdir /opt/software
+ 
+    ### Install dependencies
+    yum -y group install "Development Tools"
+    yum -y install zlib-devel bzip2-devel libzip-devel xz-devel libcurl-devel
+
+    cd /opt/software
+    git clone --recursive https://github.com/dpryan79/MethylDackel.git
+    cd MethylDackel
+    git clone https://github.com/samtools/htslib.git
+    cd htslib
+    autoheader
+    autoconf
+    ./configure
+    make
+    cd ../
+    make install CFLAGS="-std=gnu99 -O3 -Wall -I/opt/software/MethylDackel/htslib " LIBS="-L/opt/software/MethylDackel/htslib" prefix=/usr/local/bin
+
+%environment
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/software/MethylDackel/htslib
