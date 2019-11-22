@@ -1,0 +1,28 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://nbi-yum.nbi.ac.uk/software/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://nbi-yum.nbi.ac.uk/software/centos/7/updates/$basearch/
+ 
+# If you want the updates (available at the bootstrap date) to be installed
+# inside the container during the bootstrap instead of the General Availability
+# point release (7.x) then uncomment the following line
+ 
+%runscript
+ 
+%post
+    mkdir /jic
+    mkdir /nbi
+    mkdir /tgac
+    mkdir /ei
+    mkdir /tsl
+    mkdir /opt/software
+ 
+    ### Install your packages ###
+    yum -y install epel-release python-pip python-devel python-setuptools zlib-devel bzip2 bzip2-devel lzo-devel lzma xz-devel
+    yum -y groupinstall 'development tools'
+    easy_install pip
+    pip install cython numpy scipy matplotlib pysam
+    git clone https://github.com/GreenleafLab/NucleoATAC
+    cd NucleoATAC
+    pip install .
