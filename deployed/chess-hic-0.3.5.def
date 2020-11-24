@@ -1,0 +1,20 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+        yum install -y epel-release
+        yum update -y
+        yum upgrade -y
+        yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip make
+        yum group install -y "Development Tools"
+        cd /opt
+        wget https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz
+        tar xvfz Python-3.8.6.tgz
+        cd Python-3.8.6
+        ./configure --enable-optimizations
+        make altinstall
+        /usr/local/bin/python3.8 -m pip install --upgrade pip
+        pip3.8 install chess-hic
