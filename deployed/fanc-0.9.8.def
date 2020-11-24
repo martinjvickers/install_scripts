@@ -1,0 +1,41 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
+
+%post
+        yum install -y epel-release
+        yum update -y
+        yum upgrade -y
+        yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip make libsqlite3x-devel xz-devel
+        yum group install -y "Development Tools"
+
+        # Installing python3
+        cd /opt
+        wget https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz
+        tar xvfz Python-3.8.6.tgz
+        cd Python-3.8.6
+        ./configure --enable-optimizations
+        make altinstall
+        cd ../
+
+        # Installing hd5
+        mkdir hdf5-build
+        cd hdf5-build
+        wget https://support.hdfgroup.org/ftp/HDF5/current/src/hdf5-1.10.5.tar.gz
+        tar xzf hdf5-1.10.5.tar.gz
+        cd hdf5-1.10.5/
+        # use --prefix to set the folder in which HDF5 should be installed
+        # alternatively, you can omit --prefix=... here and run
+        # sudo make install to install globally (requires admin rights)
+        ./configure
+        make
+        make install
+
+
+        python3.8 -m pip install --upgrade pip
+        pip3.8 install Cython
+        pip3.8 install pysqlite3
+        pip3.8 install pysam
+        pip3.8 install fanc
