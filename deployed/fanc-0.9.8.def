@@ -8,7 +8,8 @@ UpdateURL: http://yum-repos.hpccluster/centos/7/updates/$basearch/
         yum install -y epel-release
         yum update -y
         yum upgrade -y
-        yum install -y gcc openssl-devel bzip2-devel libffi-devel wget tar gzip make libsqlite3x-devel xz-devel
+        yum install -y gcc openssl-devel bzip2-devel libffi-devel wget \
+        tar gzip make libsqlite3x-devel xz-devel bowtie2 bwa samtools
         yum group install -y "Development Tools"
 
         # Installing python3
