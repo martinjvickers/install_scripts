@@ -1,0 +1,15 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+
+%post
+yum -y install epel-release git libgomp openmpi-devel
+yum -y groupinstall 'Development Tools'
+
+git clone https://github.com/scoutzxb/CscoreTool.git
+cd CscoreTool
+rm CscoreTool1.1
+g++ CscoreTool1.1.cpp twister.cpp -fopenmp -O3 -o CscoreTool1.1
+chmod +x CscoreTool1.1
+cp CscoreTool1.1 /usr/local/bin/
