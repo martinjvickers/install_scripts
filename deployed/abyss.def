@@ -1,0 +1,26 @@
+BootStrap: debootstrap
+OSVersion: focal
+MirrorURL: http://us.archive.ubuntu.com/ubuntu/
+
+%post
+  apt-get install --force-yes -y software-properties-common wget util-linux
+  add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+  apt-get update --force-yes -y 
+
+  echo "Install miniConda"
+  wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+  bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+
+  # IMPORTANT: export the miniconda binary directory while in %post
+  export PATH=$PATH:/usr/local/miniconda/bin
+
+  echo "Add conda channels and install bioconda tools"
+  conda config --add channels conda-forge
+  conda config --set channel_priority flexible
+  conda config --add channels bioconda
+  conda update conda
+  conda install mamba
+  mamba install util-linux python=3.9 abyss=2.3.5 arcs=1.2.5 tigmint=1.2.9
+
+%environment
+  export PATH=$PATH:/usr/local/miniconda/bin
