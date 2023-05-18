@@ -1,0 +1,13 @@
+BootStrap: debootstrap
+OSVersion: focal
+MirrorURL: http://us.archive.ubuntu.com/ubuntu/
+
+%post
+  apt-get install --force-yes -y software-properties-common
+  add-apt-repository "deb http://archive.ubuntu.com/ubuntu $(lsb_release -sc) universe"
+  apt-get update --force-yes -y
+  apt-get install --force-yes -y python3-pip libbz2-dev liblzma-dev
+  pip3 install --upgrade pip
+  pip3 install ont-bonito
+
+%environment
