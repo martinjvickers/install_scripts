@@ -1,0 +1,25 @@
+BootStrap: yum
+OSVersion: 7
+MirrorURL: http://yum-repos.hpccluster/centos/7/os/$basearch/
+Include: yum
+
+%post
+   yum -y install epel-release
+   yum -y install yum-utils which wget
+   yum -y groupinstall development
+
+   mkdir /opt/software/
+   cd /opt/software/
+
+   wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh
+   bash Miniconda3-latest-Linux-x86_64.sh -b -p /usr/local/miniconda
+
+   # IMPORTANT: export the miniconda binary directory while in %post
+   export PATH=$PATH:/usr/local/miniconda/bin
+
+   conda config --add channels conda-forge
+   conda config --add channels bioconda
+
+   conda install -c conda-forge -c bioconda foldseek
+%environment
+   export PATH=$PATH:/usr/local/miniconda/bin
